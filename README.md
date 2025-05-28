@@ -2,7 +2,8 @@
 A CHIP-8 emulator written in Python.
 
 ## Usage
-### Shell
+How to actually use the emulator.
+#### Shell
 ```
 python emu.py FILE.ch8 [arguments]
 ```
@@ -17,3 +18,9 @@ python emu.py FILE.ch8 [arguments]
 |`--hz`|Instructions executed per second (default: 700)|
 |`--width`|Display width in pixels (default: 512)|
 |`--height`|Display height in pixels (default: 256)|
+
+## Resources Used
+Resources used in the development and testing of the emulator.
+- https://tobiasvl.github.io/blog/write-a-chip-8-emulator/
+- https://github.com/Timendus/chip8-test-suite
+- https://github.com/badlogic/chip8/
