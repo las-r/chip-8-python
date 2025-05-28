@@ -264,14 +264,14 @@ def execInst(inst):
                     match n4:
                         case 14:
                             # skip if key
-                            if keys[n2]:
+                            if keys[v[n2]]:
                                 pc += 2
                 
                 case 10:
                     match n4:
                         case 1:
                             # skip if not key
-                            if not keys[n2]:
+                            if not keys[v[n2]]:
                                 pc += 2
                                 
         case 15:
