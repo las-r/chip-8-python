@@ -1,11 +1,10 @@
+import argparse
 import os
 import pygame
 import random
 
 # made by las-r on github
-# v1.2
-
-# doesnt fully work yet!
+# v1.3
 
 # pygame init
 pygame.init()
@@ -19,7 +18,7 @@ beep.set_volume(0.05)
 LEGACYSHIFT = False
 LEGACYOFFSJUMP = False
 LEGACYSTORE = False
-DEBUG = True
+DEBUG = False
 HZ = 700
 
 # display settings
@@ -340,13 +339,43 @@ def execInst(inst):
                             # load mem
                             for ilx in range(n2 + 1):
                                 v[ilx] = ram[i + ilx]
+                                
+# boot function
+def boot():
+    global DEBUG, LEGACYSHIFT, LEGACYOFFSJUMP, LEGACYSTORE, HZ
+    global WIDTH, HEIGHT, PWIDTH, PHEIGHT, screen
 
-# pygame screen
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("CHIP-8 Emulator")
+    parser = argparse.ArgumentParser(description="CHIP-8 Emulator")
+    parser.add_argument("rom", help="Path to CHIP-8 ROM file")
+    parser.add_argument("--debug", action="store_true", help="Enable debug mode")
+    parser.add_argument("--legacy-bit-shift", action="store_true", help="Use legacy bit shift behavior")
+    parser.add_argument("--legacy-offset-jump", action="store_true", help="Use legacy offset jump behavior")
+    parser.add_argument("--legacy-store", action="store_true", help="Use legacy memory store behavior")
+    parser.add_argument("--hz", type=int, default=700, help="Instructions per second (default: 700)")
+    parser.add_argument("--width", type=int, default=512, help="Display width (default: 512)")
+    parser.add_argument("--height", type=int, default=256, help="Display height (default: 256)")
 
-# load file
-loadRom("roms/pong.ch8")
+    args = parser.parse_args()
+
+    # apply cl opts
+    DEBUG = args.debug
+    LEGACYSHIFT = args.legacy_bit_shift
+    LEGACYOFFSJUMP = args.legacy_offset_jump
+    LEGACYSTORE = args.legacy_store
+    HZ = args.hz
+    WIDTH = args.width
+    HEIGHT = args.height
+    PWIDTH, PHEIGHT = WIDTH // 64, HEIGHT // 32
+
+    # init display
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("CHIP-8 Emulator")
+
+    # load rom
+    loadRom(args.rom)
+
+# boot  
+boot()
 
 # main loop
 run = True
@@ -387,7 +416,8 @@ while run and pc < len(ram):
     updScreen()
     
     # refresh rate
-    os.system("cls" if os.name == "nt" else "clear")
+    if DEBUG:
+        os.system("cls" if os.name == "nt" else "clear")
     clock.tick(60)
 
 # quit
