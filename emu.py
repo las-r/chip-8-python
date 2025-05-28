@@ -4,7 +4,7 @@ import pygame
 import random
 
 # made by las-r on github
-# v1.3
+# v1.4
 
 # pygame init
 pygame.init()
@@ -351,9 +351,9 @@ def boot():
     parser.add_argument("--legacy-bit-shift", action="store_true", help="Use legacy bit shift behavior")
     parser.add_argument("--legacy-offset-jump", action="store_true", help="Use legacy offset jump behavior")
     parser.add_argument("--legacy-store", action="store_true", help="Use legacy memory store behavior")
-    parser.add_argument("--hz", type=int, default=700, help="Instructions per second (default: 700)")
-    parser.add_argument("--width", type=int, default=512, help="Display width (default: 512)")
-    parser.add_argument("--height", type=int, default=256, help="Display height (default: 256)")
+    parser.add_argument("--hz", type=int, default=700, help="Instructions executed per second (default: 700)")
+    parser.add_argument("--width", type=int, default=512, help="Display width in pixels (default: 512)")
+    parser.add_argument("--height", type=int, default=256, help="Display height in pixels (default: 256)")
 
     args = parser.parse_args()
 
