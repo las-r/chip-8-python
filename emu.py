@@ -3,7 +3,7 @@ import pygame
 import random
 
 # made by las-r on github
-# v1.0
+# v1.2
 
 # doesnt fully work yet!
 
