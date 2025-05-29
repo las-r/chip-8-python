@@ -10,16 +10,16 @@ How to actually use the emulator.
 python emu.py ROMFILE [arguments]
 ```
 ### Arguments
-|Argument|Action|
-|-|-|
-|`-h`|Get help menu|
-|`--debug`|Enable debug mode|
-|`--legacy-bit-shift`|Use legacy bit shift behavior|
-|`--legacy-offset-jump`|Use legacy offset jump behavior|
-|`--legacy-store`|Use legacy memory store behavior|
-|`--hz`|Instructions executed per second (default: 700)|
-|`--width`|Display width in pixels (default: 512)|
-|`--height`|Display height in pixels (default: 256)|
+|Argument|Action|Type|
+|-|-|-|
+|`-h`|Get help menu|N/A|
+|`--debug`|Enable debug mode|Boolean|
+|`--legacy-bit-shift`|Use legacy bit shift behavior|Boolean|
+|`--legacy-offset-jump`|Use legacy offset jump behavior|Boolean|
+|`--legacy-store`|Use legacy memory store behavior|Boolean|
+|`--hz`|Instructions executed per second (default: 700)|Integer|
+|`--width`|Display width in pixels (default: 512)|Integer|
+|`--height`|Display height in pixels (default: 256)|Integer|
 
 ## Resources Used
 Resources used in the development and testing of the emulator.
