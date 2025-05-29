@@ -1,3 +1,5 @@
+![Screenshot showing the IBM Logo in the emulator.](https://github.com/user-attachments/assets/5e3f1507-bfd3-474e-92f8-c6faf5c71a34)
+
 # CHIP-8 Python
 A CHIP-8 emulator written in Python.
 
