@@ -7,7 +7,7 @@ A CHIP-8 emulator written in Python.
 How to actually use the emulator.
 #### Shell
 ```
-python emu.py FILE.ch8 [arguments]
+python emu.py ROMFILE [arguments]
 ```
 ### Arguments
 |Argument|Action|
@@ -28,4 +28,4 @@ Resources used in the development and testing of the emulator.
 - https://github.com/badlogic/chip8/
 
 ## Credits
-Rom used in screenshot is acquired from [Timendus' CHIP-8 Test Suite](https://github.com/Timendus/chip8-test-suite).
+ROM used in screenshot is acquired from [Timendus' CHIP-8 Test Suite](https://github.com/Timendus/chip8-test-suite).
