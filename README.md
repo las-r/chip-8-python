@@ -26,3 +26,6 @@ Resources used in the development and testing of the emulator.
 - https://tobiasvl.github.io/blog/write-a-chip-8-emulator/
 - https://github.com/Timendus/chip8-test-suite
 - https://github.com/badlogic/chip8/
+
+## Credits
+Rom used in screenshot is acquired from [Timendus' CHIP-8 Test Suite](https://github.com/Timendus/chip8-test-suite).
