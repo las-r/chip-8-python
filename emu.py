@@ -4,7 +4,7 @@ import pygame
 import random
 
 # made by las-r on github
-# v1.4
+# v1.5
 
 # pygame init
 pygame.init()
@@ -343,8 +343,9 @@ def execInst(inst):
 # boot function
 def boot():
     global DEBUG, LEGACYSHIFT, LEGACYOFFSJUMP, LEGACYSTORE, HZ
-    global WIDTH, HEIGHT, PWIDTH, PHEIGHT, screen
+    global WIDTH, HEIGHT, PWIDTH, PHEIGHT, ON, OFF, screen
 
+    # declare arguments
     parser = argparse.ArgumentParser(description="CHIP-8 Emulator")
     parser.add_argument("rom", help="Path to CHIP-8 ROM file")
     parser.add_argument("--debug", action="store_true", help="Enable debug mode")
@@ -354,7 +355,8 @@ def boot():
     parser.add_argument("--hz", type=int, default=700, help="Instructions executed per second (default: 700)")
     parser.add_argument("--width", type=int, default=512, help="Display width in pixels (default: 512)")
     parser.add_argument("--height", type=int, default=256, help="Display height in pixels (default: 256)")
-
+    parser.add_argument("--pixel-color-on", nargs=3, type=int, default=(255, 255, 255), help="Color of on pixels (default: (255, 255, 255))")
+    parser.add_argument("--pixel-color-off", nargs=3, type=int, default=(0, 0, 0), help="Color of off pixels (default: (0, 0, 0))")
     args = parser.parse_args()
 
     # apply cl opts
@@ -365,6 +367,8 @@ def boot():
     HZ = args.hz
     WIDTH = args.width
     HEIGHT = args.height
+    ON = tuple(args.pixel_color_on)
+    OFF = tuple(args.pixel_color_off)
     PWIDTH, PHEIGHT = WIDTH // 64, HEIGHT // 32
 
     # init display
