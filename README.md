@@ -13,7 +13,7 @@ python emu.py ROMFILE [arguments]
 |Argument|Action|Type|
 |-|-|-|
 |`-h`|Get help menu|N/A|
-|`--debug`|Enable debug mode|Boolean|
+|`--debug`|Debug level|Integer|
 |`--legacy-bit-shift`|Use legacy bit shift behavior|Boolean|
 |`--legacy-offset-jump`|Use legacy offset jump behavior|Boolean|
 |`--legacy-store`|Use legacy memory store behavior|Boolean|
