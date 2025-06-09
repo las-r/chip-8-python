@@ -4,7 +4,7 @@ import pygame
 import random
 
 # made by las-r on github
-# v1.5
+# v1.6
 
 # pygame init
 pygame.init()
@@ -14,21 +14,21 @@ clock = pygame.time.Clock()
 beep = pygame.mixer.Sound(os.path.join("sounds", "beep.wav"))
 beep.set_volume(0.05)
 
-# behavior settings
+# behavior
 LEGACYSHIFT = False
 LEGACYOFFSJUMP = False
 LEGACYSTORE = False
-DEBUG = False
+DEBUG = 0
 HZ = 700
 
-# display settings
+# display
 WIDTH, HEIGHT = 512, 256
 PWIDTH, PHEIGHT = WIDTH // 64, HEIGHT // 32
 ON = (255, 255, 255)
 OFF = (0, 0, 0)
 disp = [[False] * 64 for _ in range(32)]
 
-# keyboard
+# keypad
 keys = [False] * 16
 keym = {
     pygame.K_1: 1,
@@ -110,7 +110,7 @@ def execInst(inst):
     n4 = int(n4, 16)
     
     # debug
-    if DEBUG:
+    if DEBUG in [1, 3]:
         print(f"PC: {pc}  Opcode: {hex(inst)}")
     
     # increment pc
@@ -124,122 +124,68 @@ def execInst(inst):
                     match n3:
                         case 14:
                             match n4:
-                                case 0:
-                                    # clear screen
-                                    disp = [[False] * 64 for _ in range(32)]
-                                    
-                                case 14:
-                                    # return from subroutine
-                                    pc = stack.pop()
-                                    
-        case 1:
-            # jump
-            pc = n4 + n3 * 16 + n2 * 256
-            
+                                case 0: disp = [[False] * 64 for _ in range(32)]
+                                case 14: pc = stack.pop() 
+        case 1: pc = n4 + n3 * 16 + n2 * 256
         case 2:
-            # jump to subroutine
             if len(stack) >= 16:
                 print("Stack overflow!")
             else:
                 stack.append(pc)
             pc = n4 + n3 * 16 + n2 * 256
-            
         case 3:
-            # skip inst if equal
             if v[n2] == n4 + n3 * 16:
                 pc += 2
-                
         case 4:
-            # skip inst if not equal
             if v[n2] != n4 + n3 * 16:
                 pc += 2
-                
         case 5:
             match n4:
                 case 0:
-                    # skip inst if v equal
                     if v[n2] == v[n3]:
-                        pc += 2
-            
-        case 6:
-            # set vx
-            v[n2] = (n4 + n3 * 16) & 255
-            
-        case 7:
-            # add to vx
-            v[n2] = (v[n2] + (n3 * 16 + n4)) & 255
-            
+                        pc += 2 
+        case 6: v[n2] = (n4 + n3 * 16) & 255
+        case 7: v[n2] = (v[n2] + (n3 * 16 + n4)) & 255
         case 8:
             match n4:
-                case 0:
-                    # set
-                    v[n2] = v[n3]
-
-                case 1:
-                    # or
-                    v[n2] = (v[n2] | v[n3]) & 255
-
-                case 2:
-                    # and
-                    v[n2] = (v[n2] & v[n3]) & 255
-
-                case 3:
-                    # xor
-                    v[n2] = (v[n2] ^ v[n3]) & 255
-
+                case 0: v[n2] = v[n3]
+                case 1: v[n2] = (v[n2] | v[n3]) & 255
+                case 2: v[n2] = (v[n2] & v[n3]) & 255
+                case 3: v[n2] = (v[n2] ^ v[n3]) & 255
                 case 4:
-                    # add
                     result = v[n2] + v[n3]
                     v[15] = 1 if result > 255 else 0
                     v[n2] = result & 255
-
                 case 5:
-                    # sub (vx - vy)
                     v[15] = 1 if v[n2] > v[n3] else 0
                     v[n2] = (v[n2] - v[n3]) & 255
-
                 case 6:
-                    # right shift
                     if LEGACYSHIFT:
                         v[n2] = v[n3]
                     v[15] = v[n2] & 1
                     v[n2] = (v[n2] >> 1) & 255
-
                 case 7:
-                    # sub (vy - vx)
                     v[15] = 1 if v[n3] > v[n2] else 0
                     v[n2] = (v[n3] - v[n2]) & 255
-
                 case 14:
-                    # left shift
                     if LEGACYSHIFT:
                         v[n2] = v[n3]
                     v[15] = (v[n2] >> 7) & 1
                     v[n2] = (v[n2] << 1) & 255
-            
         case 9:
             match n4:
                 case 0:
-                    # skip inst if v not equal
                     if v[n2] != v[n3]:
                         pc += 2
-            
         case 10:
-            # set i
             i = n4 + n3 * 16 + n2 * 256
-            
         case 11:
-            # offset jump
             if LEGACYOFFSJUMP:
                 pc = n4 + n3 * 16 + n2 * 256 + v[0]
             else:
                 pc = n4 + n3 * 16 + v[n2]
-                
-        case 12:
-            v[n2] = random.randint(0, 255) & (n4 + n3 * 16)
-            
+        case 12: v[n2] = random.randint(0, 255) & (n4 + n3 * 16)
         case 13:
-            # draw
             x = v[n2] % 64
             y = v[n3] % 32
             h = n4
@@ -256,33 +202,24 @@ def execInst(inst):
                         if disp[dy][dx]:
                             v[0xf] = 1
                         disp[dy][dx] ^= True
-                        
         case 14:
             match n3:
                 case 9:
                     match n4:
                         case 14:
-                            # skip if key
                             if keys[v[n2]]:
                                 pc += 2
-                
                 case 10:
                     match n4:
                         case 1:
-                            # skip if not key
                             if not keys[v[n2]]:
                                 pc += 2
-                                
         case 15:
             match n3:
                 case 0:
                     match n4:
-                        case 7:
-                            # set vx to dt
-                            v[n2] = dtime
-                            
+                        case 7: v[n2] = dtime
                         case 10:
-                            # get key (blocking wait)
                             waiting = True
                             while waiting:
                                 for event in pygame.event.get():
@@ -294,49 +231,30 @@ def execInst(inst):
                                             v[n2] = keym[event.key]
                                             waiting = False
                                     updScreen()
-                            
-                            
                 case 1:
                     match n4:
-                        case 5:
-                            # set dt to vx
-                            dtime = v[n2]
-                            
-                        case 8:
-                            # set st to vx
-                            stime = v[n2]
-                            
-                        case 14:
-                            # i + vx
-                            i += v[n2]
-                            
+                        case 5: dtime = v[n2]
+                        case 8: stime = v[n2] 
+                        case 14: i += v[n2]
                 case 2:
                     match n4:
-                        case 9:
-                            # set i to font char
-                            i = 0x50 + v[n2] * 5
-                        
+                        case 9: i = 0x50 + v[n2] * 5
                 case 3:
                     match n4:
                         case 3:
-                            # decimal convert
                             ram[i] = v[n2] // 100
                             ram[i + 1] = (v[n2] % 100) // 10
                             ram[i + 2] = v[n2] % 10
-                                
                 case 5:
                     match n4:
                         case 5:
-                            # store mem
                             for ivx in range(n2 + 1):
                                 ram[i + ivx] = v[ivx]
                                 if LEGACYSTORE:
-                                    i += 1
-                                    
+                                    i += 1 
                 case 6:
                     match n4:
                         case 5:
-                            # load mem
                             for ilx in range(n2 + 1):
                                 v[ilx] = ram[i + ilx]
                                 
@@ -348,7 +266,7 @@ def boot():
     # declare arguments
     parser = argparse.ArgumentParser(description="CHIP-8 Emulator")
     parser.add_argument("rom", help="Path to CHIP-8 ROM file")
-    parser.add_argument("--debug", action="store_true", help="Enable debug mode")
+    parser.add_argument("--debug", default=0, help="Debug level [1: execution, 2: keypad, 3: both] (default: 0)")
     parser.add_argument("--legacy-bit-shift", action="store_true", help="Use legacy bit shift behavior")
     parser.add_argument("--legacy-offset-jump", action="store_true", help="Use legacy offset jump behavior")
     parser.add_argument("--legacy-store", action="store_true", help="Use legacy memory store behavior")
@@ -402,26 +320,21 @@ while run and pc < len(ram):
     for _ in range(HZ // 60):
         execInst((ram[pc] << 8) | ram[pc + 1])
     
-    # keys debug
-    if DEBUG:
-        print(f"Keys: {keys}")
+    # debug
+    if DEBUG in [2, 3]:
+        print(f"Keys:")
+        print(f"{keys[0]} {keys[1]} {keys[2]} {keys[3]}\n{keys[4]} {keys[5]} {keys[6]} {keys[7]}\n{keys[8]} {keys[9]} {keys[10]} {keys[11]}\n{keys[12]} {keys[13]} {keys[14]} {keys[15]}")
             
-    # update timers
+    # timers
     if dtime > 0:
         dtime -= 1
     if stime > 0:
         stime -= 1
-        
-    # st beep
     if stime:
         beep.play()
             
     # update screen
     updScreen()
-    
-    # refresh rate
-    if DEBUG:
-        os.system("cls" if os.name == "nt" else "clear")
     clock.tick(60)
 
 # quit
