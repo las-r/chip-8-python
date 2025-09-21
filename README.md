@@ -29,3 +29,5 @@ Resources used in the development and testing of the emulator.
 
 ## Credits
 ROM used in screenshot is acquired from [Timendus' CHIP-8 Test Suite](https://github.com/Timendus/chip8-test-suite).
+
+I should probably remake this. I know a lot more about programming now than I did back then.
