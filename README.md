@@ -7,7 +7,7 @@ A CHIP-8 emulator written in Python.
 How to actually use the emulator.
 #### Shell
 ```
-python emu.py ROMFILE [arguments]
+python c8-emu.py ROMFILE [arguments]
 ```
 ### Arguments
 |Argument|Action|Type|
